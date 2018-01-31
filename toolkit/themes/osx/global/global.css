@@ -29,12 +29,19 @@ menulist > menupopup {
 window,
 page,
 dialog,
-prefwindow,
-wizard {
+wizard,
+prefwindow {
   -moz-appearance: dialog;
   background-color: #FFFFFF;
   color: -moz-DialogText;
   font: message-box;
+}
+
+prefwindow[type="child"] {
+  padding-top: 18px;
+  padding-bottom: 15px;
+  padding-inline-start: 18px;
+  padding-inline-end: 20px;
 }
 
 /* deprecated */
@@ -92,6 +99,29 @@ iframe {
   }
 }
 
+/* ::::: statusbar ::::: */
+
+statusbar {
+  min-width: 1px; /* DON'T DELETE!
+  Prevents hiding of scrollbars in browser when window is made smaller.*/
+  min-height: 15px !important;
+  margin: 0px !important;
+  /* need to use padding-inline-end when/if bug 631729 gets fixed: */
+  padding: 0px 16px 1px 1px;
+  -moz-appearance: statusbar;
+  text-shadow: rgba(255, 255, 255, 0.4) 0 1px;
+}
+
+statusbarpanel {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  padding: 0 4px;
+}
+
+.statusbarpanel-iconic {
+  padding: 0px;
+}
+
 /* ::::: miscellaneous formatting ::::: */
 
 sidebarheader {
@@ -110,6 +140,13 @@ sidebarheader {
 
 :root[lwtheme-image]:-moz-lwtheme-brighttext {
   text-shadow: 1px 1px 1.5px black;
+}
+
+statusbar:-moz-lwtheme {
+  -moz-appearance: none;
+  background: none;
+  border-style: none;
+  text-shadow: inherit;
 }
 
 .inset {
@@ -198,6 +235,10 @@ label[disabled="true"] {
 
 .spaced {
   margin: 3px 5px 4px;
+}
+
+.wizard-box {
+  padding: 20px 44px 10px;
 }
 
 .text-link {

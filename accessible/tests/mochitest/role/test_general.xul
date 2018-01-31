@@ -25,6 +25,8 @@
 
       ok(!isAccessible("statusbarpanel"),
                       "statusbarpanel shouldn't be accessible.");
+      testRole("statusbarpanel-iconic", ROLE_PUSHBUTTON);
+      testRole("statusbarpanel-iconic-text", ROLE_PUSHBUTTON);
       testRole("statusbar", ROLE_STATUSBAR);
 
       SimpleTest.finish();
@@ -55,6 +57,8 @@
   <image id="image-onclick" src="../moz.png" onclick=""/>
 
   <statusbarpanel id="statusbarpanel"></statusbarpanel>
+  <statusbarpanel id="statusbarpanel-iconic" class="statusbarpanel-iconic"></statusbarpanel>
+  <statusbarpanel id="statusbarpanel-iconic-text" class="statusbarpanel-iconic-text"></statusbarpanel>
   <statusbar id="statusbar"></statusbar>
 
   </hbox>

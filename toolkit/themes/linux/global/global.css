@@ -40,8 +40,8 @@ progressmeter[mode="undetermined"] {
 window,
 page,
 dialog,
-prefwindow,
-wizard {
+wizard,
+prefwindow {
   -moz-appearance: window;
   background-color: -moz-Dialog;
   color: -moz-DialogText;
@@ -97,6 +97,37 @@ iframe {
   }
 }
 
+/* ::::: statusbar ::::: */
+
+statusbar {
+  -moz-appearance: statusbar;
+  min-height: 22px;
+}
+
+statusbar:-moz-lwtheme {
+  -moz-appearance: none;
+}
+
+statusbarpanel {
+  -moz-appearance: statusbarpanel;
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  padding: 0 4px;
+}
+
+.statusbar-resizerpanel {
+  -moz-box-align: end;
+  -moz-box-pack: end;
+  -moz-appearance: resizerpanel;
+  padding: 0;
+}
+
+.statusbarpanel-iconic,
+.statusbarpanel-iconic-text,
+.statusbarpanel-menu-iconic {
+  padding: 0 1px;
+}
+
 /* XXXBlake yeah, shoot me -- these don't belong here.  I'll move them later. */
 
 sidebarheader {
@@ -119,7 +150,8 @@ toolbar[mode="text"] .toolbarbutton-text {
 
 /* ::::: miscellaneous formatting ::::: */
 
-:root:-moz-lwtheme {
+:root:-moz-lwtheme,
+statusbarpanel:-moz-lwtheme {
   -moz-appearance: none;
 }
 
@@ -223,6 +255,10 @@ label[disabled="true"] {
 
 .spaced {
   margin: 3px 5px 4px;
+}
+
+.wizard-box {
+  padding: 20px 44px 10px;
 }
 
 .text-link {
