@@ -506,9 +506,21 @@ nsJARURI::GetPathQueryRef(nsACString &aPath)
 }
 
 nsresult
+nsJARURI::GetPath(nsACString &aPath)
+{
+    return GetPathQueryRef(aPath);
+}
+
+NS_IMETHODIMP
 nsJARURI::SetPathQueryRef(const nsACString &aPath)
 {
     return NS_ERROR_FAILURE;
+}
+
+NS_IMETHODIMP
+nsJARURI::SetPath(const nsACString &aPath)
+{
+    return SetPathQueryRef(aPath);
 }
 
 NS_IMETHODIMP

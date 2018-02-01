@@ -147,9 +147,21 @@ NullPrincipalURI::GetPathQueryRef(nsACString& _path)
 }
 
 nsresult
+NullPrincipalURI::GetPath(nsACString& _path)
+{
+  return GetPathQueryRef(_path);
+}
+
+NS_IMETHODIMP
 NullPrincipalURI::SetPathQueryRef(const nsACString& aPath)
 {
   return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+NS_IMETHODIMP
+NullPrincipalURI::SetPath(const nsACString& aPath)
+{
+  return SetPathQueryRef(aPath);
 }
 
 NS_IMETHODIMP

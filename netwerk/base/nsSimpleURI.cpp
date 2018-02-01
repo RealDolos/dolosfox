@@ -444,12 +444,25 @@ nsSimpleURI::GetPathQueryRef(nsACString &result)
 }
 
 nsresult
+nsSimpleURI::GetPath(nsACString &result)
+{
+    return GetPathQueryRef(result);
+}
+
+NS_IMETHODIMP
 nsSimpleURI::SetPathQueryRef(const nsACString &aPath)
 {
     NS_ENSURE_STATE(mMutable);
 
     return SetPathQueryRefEscaped(aPath, true);
 }
+
+NS_IMETHODIMP
+nsSimpleURI::SetPath(const nsACString &aPath)
+{
+    return SetPathQueryRef(aPath);
+}
+
 nsresult
 nsSimpleURI::SetPathQueryRefEscaped(const nsACString &aPath, bool aNeedsEscape)
 {

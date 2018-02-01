@@ -1478,6 +1478,12 @@ nsStandardURL::GetPathQueryRef(nsACString &result)
     return NS_OK;
 }
 
+NS_IMETHODIMP
+nsStandardURL::GetPath(nsACString &result)
+{
+    return GetPathQueryRef(result);
+}
+
 // result is ASCII
 NS_IMETHODIMP
 nsStandardURL::GetAsciiSpec(nsACString &result)
@@ -2215,6 +2221,12 @@ nsStandardURL::SetPathQueryRef(const nsACString &input)
         mRef.mLen = -1;
     }
     return NS_OK;
+}
+
+NS_IMETHODIMP
+nsStandardURL::SetPath(const nsACString &input)
+{
+    return SetPathQueryRef(input);
 }
 
 // When updating this also update SubstitutingURL::Mutator

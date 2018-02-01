@@ -415,9 +415,21 @@ nsMozIconURI::GetPathQueryRef(nsACString& aPath)
 }
 
 nsresult
+nsMozIconURI::GetPath(nsACString& aPath)
+{
+  return GetPathQueryRef(aPath);
+}
+
+NS_IMETHODIMP
 nsMozIconURI::SetPathQueryRef(const nsACString& aPath)
 {
   return NS_ERROR_FAILURE;
+}
+
+NS_IMETHODIMP
+nsMozIconURI::SetPath(const nsACString& aPath)
+{
+  return SetPathQueryRef(aPath);
 }
 
 NS_IMETHODIMP

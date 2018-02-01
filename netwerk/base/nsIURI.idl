@@ -161,6 +161,7 @@ interface nsIURI : nsISupports
      * Use the 'filePath' attribute if you do not want those parts included.
      */
     readonly attribute AUTF8String pathQueryRef;
+    attribute AUTF8String path;
 
 
     /************************************************************************
