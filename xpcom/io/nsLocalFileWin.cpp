@@ -832,6 +832,7 @@ nsLocalFile::nsLocalFileConstructor(nsISupports* aOuter, const nsIID& aIID,
 //-----------------------------------------------------------------------------
 
 NS_IMPL_ISUPPORTS(nsLocalFile,
+                  nsILocalFile,
                   nsIFile,
                   nsILocalFileWin,
                   nsIHashable)

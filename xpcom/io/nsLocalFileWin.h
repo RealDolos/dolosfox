@@ -44,6 +44,7 @@ public:
 
   // nsIFile interface
   NS_DECL_NSIFILE
+  NS_DECL_NSILOCALFILE
 
   // nsILocalFileWin interface
   NS_DECL_NSILOCALFILEWIN

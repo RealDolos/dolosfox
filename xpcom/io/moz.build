@@ -19,6 +19,7 @@ XPIDL_SOURCES += [
     'nsIInputStreamTee.idl',
     'nsIIOUtil.idl',
     'nsILineInputStream.idl',
+    'nsILocalFile.idl',
     'nsILocalFileWin.idl',
     'nsIMultiplexInputStream.idl',
     'nsIObjectInputStream.idl',

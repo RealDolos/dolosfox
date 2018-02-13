@@ -23,6 +23,8 @@
 #include "mozilla/Attributes.h"
 #ifdef MOZ_WIDGET_COCOA
 #include "nsILocalFileMac.h"
+#else
+#include "nsILocalFile.h"
 #endif
 
 /**
@@ -83,7 +85,7 @@ class nsLocalFile final
 #ifdef MOZ_WIDGET_COCOA
   : public nsILocalFileMac
 #else
-  : public nsIFile
+  : public nsILocalFile
 #endif
   , public nsIHashable
 {
@@ -99,6 +101,7 @@ public:
 
   NS_DECL_THREADSAFE_ISUPPORTS
   NS_DECL_NSIFILE
+  NS_DECL_NSILOCALFILE
 #ifdef MOZ_WIDGET_COCOA
   NS_DECL_NSILOCALFILEMAC
 #endif
