@@ -49,6 +49,8 @@ public:
   NS_DECL_NSICLASSINFO
   NS_DECL_NSIIPCSERIALIZABLEURI
 
+  NS_IMETHOD SetScheme(const nsACString &aProtocol) override;
+
   // Override CloneInternal() and EqualsInternal()
   virtual nsresult CloneInternal(RefHandlingEnum aRefHandlingMode,
                                  const nsACString& newRef,
@@ -76,7 +78,6 @@ public:
 protected:
   virtual ~nsHostObjectURI() {}
 
-  nsresult SetScheme(const nsACString &aProtocol) override;
   bool Deserialize(const mozilla::ipc::URIParams&);
 
 public:

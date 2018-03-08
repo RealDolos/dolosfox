@@ -180,19 +180,6 @@ protected:
     // returns NS_ERROR_NO_INTERFACE if the url does not map to a file
     virtual nsresult EnsureFile();
 
-    virtual nsresult SetSpecInternal(const nsACString &input);
-    virtual nsresult SetScheme(const nsACString &input);
-    virtual nsresult SetUserPass(const nsACString &input);
-    virtual nsresult SetUsername(const nsACString &input);
-    virtual nsresult SetPassword(const nsACString &input);
-    virtual nsresult SetHostPort(const nsACString &aValue);
-    virtual nsresult SetHost(const nsACString &input);
-    virtual nsresult SetPort(int32_t port);
-    virtual nsresult SetPathQueryRef(const nsACString &input);
-    virtual nsresult SetRef(const nsACString &input);
-    virtual nsresult SetFilePath(const nsACString &input);
-    virtual nsresult SetQuery(const nsACString &input);
-    virtual nsresult SetQueryWithEncoding(const nsACString &input, const Encoding* encoding);
     bool Deserialize(const mozilla::ipc::URIParams&);
 
 private:

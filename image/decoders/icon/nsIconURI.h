@@ -14,9 +14,6 @@
 #include "nsINestedURI.h"
 #include "nsIURIMutator.h"
 
-namespace mozilla {
-class Encoding;
-}
 
 class nsMozIconURI final
   : public nsIMozIconURI
@@ -48,20 +45,6 @@ protected:
   int32_t mIconState;  // -1 if not specified, otherwise index into
                        // kStateStrings
 
-private:
-  nsresult SetSpecInternal(const nsACString &input);
-  nsresult SetScheme(const nsACString &input);
-  nsresult SetUserPass(const nsACString &input);
-  nsresult SetUsername(const nsACString &input);
-  nsresult SetPassword(const nsACString &input);
-  nsresult SetHostPort(const nsACString &aValue);
-  nsresult SetHost(const nsACString &input);
-  nsresult SetPort(int32_t port);
-  nsresult SetPathQueryRef(const nsACString &input);
-  nsresult SetRef(const nsACString &input);
-  nsresult SetFilePath(const nsACString &input);
-  nsresult SetQuery(const nsACString &input);
-  nsresult SetQueryWithEncoding(const nsACString &input, const mozilla::Encoding* encoding);
   bool Deserialize(const mozilla::ipc::URIParams&);
 
 public:

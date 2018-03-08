@@ -317,7 +317,7 @@ nsSimpleURI::GetScheme(nsACString &result)
     return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetScheme(const nsACString &scheme)
 {
     NS_ENSURE_STATE(mMutable);
@@ -346,7 +346,7 @@ nsSimpleURI::GetUserPass(nsACString &result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetUserPass(const nsACString &userPass)
 {
     return NS_ERROR_FAILURE;
@@ -358,7 +358,7 @@ nsSimpleURI::GetUsername(nsACString &result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetUsername(const nsACString &userName)
 {
     NS_ENSURE_STATE(mMutable);
@@ -372,7 +372,7 @@ nsSimpleURI::GetPassword(nsACString &result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetPassword(const nsACString &password)
 {
     NS_ENSURE_STATE(mMutable);
@@ -389,8 +389,16 @@ nsSimpleURI::GetHostPort(nsACString &result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetHostPort(const nsACString &result)
+{
+    NS_ENSURE_STATE(mMutable);
+
+    return NS_ERROR_FAILURE;
+}
+
+NS_IMETHODIMP
+nsSimpleURI::SetHostAndPort(const nsACString &result)
 {
     NS_ENSURE_STATE(mMutable);
 
@@ -405,7 +413,7 @@ nsSimpleURI::GetHost(nsACString &result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetHost(const nsACString &host)
 {
     NS_ENSURE_STATE(mMutable);
@@ -421,7 +429,7 @@ nsSimpleURI::GetPort(int32_t *result)
     return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetPort(int32_t port)
 {
     NS_ENSURE_STATE(mMutable);
@@ -443,7 +451,7 @@ nsSimpleURI::GetPathQueryRef(nsACString &result)
     return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::GetPath(nsACString &result)
 {
     return GetPathQueryRef(result);
@@ -539,7 +547,7 @@ nsSimpleURI::GetRef(nsACString &result)
 
 // NOTE: SetRef("") removes our ref, whereas SetRef("#") sets it to the empty
 // string (and will result in .spec and .path having a terminal #).
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetRef(const nsACString &aRef)
 {
     NS_ENSURE_STATE(mMutable);
@@ -835,7 +843,7 @@ nsSimpleURI::GetFilePath(nsACString& aFilePath)
     return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetFilePath(const nsACString& aFilePath)
 {
     return NS_ERROR_FAILURE;
@@ -853,7 +861,7 @@ nsSimpleURI::GetQuery(nsACString& aQuery)
     return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetQuery(const nsACString& aQuery)
 {
     NS_ENSURE_STATE(mMutable);
@@ -883,7 +891,7 @@ nsSimpleURI::SetQuery(const nsACString& aQuery)
     return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsSimpleURI::SetQueryWithEncoding(const nsACString& aQuery,
                                   const Encoding* aEncoding)
 {

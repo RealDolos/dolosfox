@@ -328,7 +328,7 @@ nsMozIconURI::GetScheme(nsACString& aScheme)
   return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetScheme(const nsACString& aScheme)
 {
   // doesn't make sense to set the scheme of a moz-icon URL
@@ -341,7 +341,7 @@ nsMozIconURI::GetUsername(nsACString& aUsername)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetUsername(const nsACString& aUsername)
 {
   return NS_ERROR_FAILURE;
@@ -353,7 +353,7 @@ nsMozIconURI::GetPassword(nsACString& aPassword)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetPassword(const nsACString& aPassword)
 {
   return NS_ERROR_FAILURE;
@@ -365,7 +365,7 @@ nsMozIconURI::GetUserPass(nsACString& aUserPass)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetUserPass(const nsACString& aUserPass)
 {
   return NS_ERROR_FAILURE;
@@ -377,8 +377,14 @@ nsMozIconURI::GetHostPort(nsACString& aHostPort)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetHostPort(const nsACString& aHostPort)
+{
+  return NS_ERROR_FAILURE;
+}
+
+NS_IMETHODIMP
+nsMozIconURI::SetHostAndPort(const nsACString& aHostPort)
 {
   return NS_ERROR_FAILURE;
 }
@@ -389,7 +395,7 @@ nsMozIconURI::GetHost(nsACString& aHost)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetHost(const nsACString& aHost)
 {
   return NS_ERROR_FAILURE;
@@ -401,7 +407,7 @@ nsMozIconURI::GetPort(int32_t* aPort)
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetPort(int32_t aPort)
 {
   return NS_ERROR_FAILURE;
@@ -414,7 +420,7 @@ nsMozIconURI::GetPathQueryRef(nsACString& aPath)
   return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::GetPath(nsACString& aPath)
 {
   return GetPathQueryRef(aPath);
@@ -439,7 +445,7 @@ nsMozIconURI::GetFilePath(nsACString& aFilePath)
   return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetFilePath(const nsACString& aFilePath)
 {
   return NS_ERROR_FAILURE;
@@ -452,13 +458,13 @@ nsMozIconURI::GetQuery(nsACString& aQuery)
   return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetQuery(const nsACString& aQuery)
 {
   return NS_ERROR_FAILURE;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetQueryWithEncoding(const nsACString& aQuery,
                                    const Encoding* aEncoding)
 {
@@ -472,7 +478,7 @@ nsMozIconURI::GetRef(nsACString& aRef)
   return NS_OK;
 }
 
-nsresult
+NS_IMETHODIMP
 nsMozIconURI::SetRef(const nsACString& aRef)
 {
   return NS_ERROR_FAILURE;
