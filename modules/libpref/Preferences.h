@@ -18,6 +18,8 @@
 #include "nsCOMPtr.h"
 #include "nsIObserver.h"
 #include "nsIPrefBranch.h"
+#include "nsIPrefBranch2.h"
+#include "nsIPrefBranchInternal.h"
 #include "nsIPrefService.h"
 #include "nsPrintfCString.h"
 #include "nsString.h"
@@ -51,7 +53,7 @@ enum class PrefValueKind : uint8_t
 class Preferences final
   : public nsIPrefService
   , public nsIObserver
-  , public nsIPrefBranch
+  , public nsIPrefBranchInternal
   , public nsSupportsWeakReference
 {
   friend class ::nsPrefBranch;

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "mozilla/Assertions.h"
 #include "base/basictypes.h"
 #include "GeckoProfiler.h"
 #include "MainThreadUtils.h"
@@ -54,6 +55,8 @@
 #include "nsIObserverService.h"
 #include "nsIOutputStream.h"
 #include "nsIPrefBranch.h"
+#include "nsIPrefBranch2.h"
+#include "nsIPrefBranchInternal.h"
 #include "nsIPrefLocalizedString.h"
 #include "nsIRelativeFilePref.h"
 #include "nsISafeOutputStream.h"
@@ -1382,7 +1385,7 @@ private:
 };
 
 class nsPrefBranch final
-  : public nsIPrefBranch
+  : public nsIPrefBranchInternal
   , public nsIObserver
   , public nsSupportsWeakReference
 {
@@ -1544,6 +1547,8 @@ nsPrefBranch::~nsPrefBranch()
 
 NS_IMPL_ISUPPORTS(nsPrefBranch,
                   nsIPrefBranch,
+                  nsIPrefBranch2,
+                  nsIPrefBranchInternal,
                   nsIObserver,
                   nsISupportsWeakReference)
 
@@ -1864,6 +1869,20 @@ nsPrefBranch::GetComplexValue(const char* aPrefName,
     return NS_OK;
   }
 
+  if (aType.Equals(NS_GET_IID(nsISupportsString))) {
+    nsCOMPtr<nsISupportsString> theString(
+      do_CreateInstance(NS_SUPPORTS_STRING_CONTRACTID, &rv));
+
+    if (NS_SUCCEEDED(rv)) {
+      // Debugging to see why we end up with very long strings here with
+      // some addons, see bug 836263.
+      NS_ConvertUTF8toUTF16 wdata(utf8String);
+      theString->SetData(wdata);
+      theString.forget(reinterpret_cast<nsISupportsString**>(aRetVal));
+    }
+    return rv;
+  }
+
   NS_WARNING("nsPrefBranch::GetComplexValue - Unsupported interface type");
   return NS_NOINTERFACE;
 }
@@ -1981,7 +2000,8 @@ nsPrefBranch::SetComplexValue(const char* aPrefName,
     return SetCharPrefNoLengthCheck(aPrefName, descriptorString);
   }
 
-  if (aType.Equals(NS_GET_IID(nsIPrefLocalizedString))) {
+  if (aType.Equals(NS_GET_IID(nsISupportsString)) ||
+      aType.Equals(NS_GET_IID(nsIPrefLocalizedString))) {
     nsCOMPtr<nsISupportsString> theString = do_QueryInterface(aValue);
 
     if (theString) {
@@ -2469,6 +2489,9 @@ Preferences::HandleDirty()
 
 static nsresult
 openPrefFile(nsIFile* aFile, PrefValueKind aKind);
+
+static nsresult
+pref_LoadPrefsInDirList(const char* aListId);
 
 static const char kTelemetryPref[] = "toolkit.telemetry.enabled";
 static const char kChannelPref[] = "app.update.channel";
@@ -2987,6 +3010,8 @@ Preferences::GetInstanceForService()
 
     observerService->AddObserver(
       sPreferences, "suspend_process_notification", true);
+    observerService->AddObserver(
+      sPreferences, "load-extension-defaults", true);
 
     if (NS_FAILED(rv)) {
       sPreferences = nullptr;
@@ -3078,6 +3103,8 @@ NS_IMPL_ISUPPORTS(Preferences,
                   nsIPrefService,
                   nsIObserver,
                   nsIPrefBranch,
+                  nsIPrefBranch2,
+                  nsIPrefBranchInternal,
                   nsISupportsWeakReference)
 
 /* static */ void
@@ -3164,6 +3191,9 @@ Preferences::Observe(nsISupports* aSubject,
   } else if (!nsCRT::strcmp(aTopic, "reload-default-prefs")) {
     // Reload the default prefs from file.
     Unused << InitInitialObjects();
+
+  } else if (!strcmp(aTopic, "load-extension-defaults")) {
+    pref_LoadPrefsInDirList(NS_EXT_PREFS_DEFAULTS_DIR_LIST);
 
   } else if (!nsCRT::strcmp(aTopic, "suspend_process_notification")) {
     // Our process is being suspended. The OS may wake our process later,
@@ -3289,6 +3319,41 @@ Preferences::SavePrefFile(nsIFile* aFile)
   // This is the method accessible from service API. Make it off main thread.
   return SavePrefFileInternal(aFile, SaveMethod::Asynchronous);
 }
+
+static nsresult
+pref_ReadPrefFromJar(nsZipArchive* aJarReader, const char* aName);
+
+static nsresult
+ReadExtensionPrefs(nsIFile* aFile)
+{
+  nsresult rv;
+  RefPtr<nsZipArchive> zip = new nsZipArchive();
+  rv = zip->OpenArchive(aFile);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  nsZipFind* findPtr;
+  nsAutoPtr<nsZipFind> find;
+  rv = zip->FindInit("defaults/preferences/*.[Jj][Ss]$", &findPtr);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  const char* entryName;
+  uint16_t entryNameLen;
+  nsTArray<nsCString> prefEntries;
+  find = findPtr;
+  while (NS_SUCCEEDED(find->FindNext(&entryName, &entryNameLen))) {
+    prefEntries.AppendElement(Substring(entryName, entryNameLen));
+  }
+  prefEntries.Sort();
+  for (uint32_t i = prefEntries.Length(); i--;) {
+    rv = pref_ReadPrefFromJar(zip, prefEntries[i].get());
+    if (NS_FAILED(rv)) {
+      NS_WARNING("Error parsing preferences.");
+    }
+  }
+
+  return rv;
+}
+
 
 /* static */ void
 Preferences::SetPreference(const dom::Pref& aDomPref)
@@ -3757,6 +3822,49 @@ pref_LoadPrefsInDir(nsIFile* aDir,
 }
 
 static nsresult
+pref_LoadPrefsInDirList(const char* aListId)
+{
+  nsresult rv;
+  nsCOMPtr<nsIProperties> dirSvc(
+    do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
+  if (NS_FAILED(rv)) {
+    return rv;
+  }
+
+  nsCOMPtr<nsISimpleEnumerator> list;
+  dirSvc->Get(aListId, NS_GET_IID(nsISimpleEnumerator), getter_AddRefs(list));
+  if (!list) {
+    return NS_OK;
+  }
+
+  bool hasMore;
+  while (NS_SUCCEEDED(list->HasMoreElements(&hasMore)) && hasMore) {
+    nsCOMPtr<nsISupports> elem;
+    list->GetNext(getter_AddRefs(elem));
+    if (!elem) {
+      continue;
+    }
+
+    nsCOMPtr<nsIFile> path = do_QueryInterface(elem);
+    if (!path) {
+      continue;
+    }
+
+    // Do we care if a file provided by this process fails to load?
+    nsAutoCString leaf;
+    path->GetNativeLeafName(leaf);
+    if (Substring(leaf, leaf.Length() - 4).EqualsLiteral(".xpi")) {
+      ReadExtensionPrefs(path);
+    }
+    else {
+      pref_LoadPrefsInDir(path, nullptr, 0);
+    }
+  }
+
+  return NS_OK;
+}
+
+static nsresult
 pref_ReadPrefFromJar(nsZipArchive* aJarReader, const char* aName)
 {
   TimeStamp startTime = TimeStamp::Now();
@@ -3916,33 +4024,9 @@ Preferences::InitInitialObjects()
     }
   }
 
-  nsCOMPtr<nsIProperties> dirSvc(
-    do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
+  rv = pref_LoadPrefsInDirList(NS_APP_PREFS_DEFAULTS_DIR_LIST);
   NS_ENSURE_SUCCESS(
-    rv, Err("do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID) failed"));
-
-  nsCOMPtr<nsISimpleEnumerator> list;
-  dirSvc->Get(NS_APP_PREFS_DEFAULTS_DIR_LIST,
-              NS_GET_IID(nsISimpleEnumerator),
-              getter_AddRefs(list));
-  if (list) {
-    bool hasMore;
-    while (NS_SUCCEEDED(list->HasMoreElements(&hasMore)) && hasMore) {
-      nsCOMPtr<nsISupports> elem;
-      list->GetNext(getter_AddRefs(elem));
-      if (!elem) {
-        continue;
-      }
-
-      nsCOMPtr<nsIFile> path = do_QueryInterface(elem);
-      if (!path) {
-        continue;
-      }
-
-      // Do we care if a file provided by this process fails to load?
-      pref_LoadPrefsInDir(path, nullptr, 0);
-    }
-  }
+    rv, Err("pref_LoadPrefsInDirList(NS_APP_PREFS_DEFAULTS_DIR_LIST) failed"));
 
 #ifdef MOZ_WIDGET_ANDROID
   // Set up the correct default for toolkit.telemetry.enabled. If this build
@@ -4007,6 +4091,10 @@ Preferences::InitInitialObjects()
 
   observerService->NotifyObservers(
     nullptr, NS_PREFSERVICE_APPDEFAULTS_TOPIC_ID, nullptr);
+
+  rv = pref_LoadPrefsInDirList(NS_EXT_PREFS_DEFAULTS_DIR_LIST);
+  NS_ENSURE_SUCCESS(
+    rv, Err("pref_LoadPrefsInDirList(NS_EXT_PREFS_DEFAULTS_DIR_LIST) failed"));
 
   return Ok();
 }

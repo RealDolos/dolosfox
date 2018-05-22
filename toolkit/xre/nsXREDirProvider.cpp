@@ -935,6 +935,24 @@ nsXREDirProvider::GetFilesInternal(const char* aProperty,
 
     rv = NS_SUCCESS_AGGREGATE_RESULT;
   }
+  else if (!strcmp(aProperty, NS_EXT_PREFS_DEFAULTS_DIR_LIST)) {
+    nsCOMArray<nsIFile> directories;
+
+    LoadDirsIntoArray(AddonManagerStartup::GetSingleton().ExtensionPaths(),
+                      kAppendPrefDir, directories);
+
+    if (mProfileDir) {
+      nsCOMPtr<nsIFile> overrideFile;
+      mProfileDir->Clone(getter_AddRefs(overrideFile));
+      overrideFile->AppendNative(NS_LITERAL_CSTRING(PREF_OVERRIDE_DIRNAME));
+
+      bool exists;
+      if (NS_SUCCEEDED(overrideFile->Exists(&exists)) && exists)
+        directories.AppendObject(overrideFile);
+    }
+
+    rv = NS_NewArrayEnumerator(aResult, directories);
+  }
   else
     rv = NS_ERROR_FAILURE;
 
@@ -1015,6 +1033,8 @@ nsXREDirProvider::DoStartup()
     }
 
     obsSvc->NotifyObservers(nullptr, "profile-after-change", kStartup);
+    obsSvc->NotifyObservers(nullptr, "load-extension-defaults", nullptr);
+
 
     // Any component that has registered for the profile-after-change category
     // should also be created at this time.

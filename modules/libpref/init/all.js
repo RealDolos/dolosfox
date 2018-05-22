@@ -6000,6 +6000,10 @@ pref("layers.advanced.table", false);
 // Enable lowercased response header name
 pref("dom.xhr.lowercase_header.enabled", false);
 
+// Compat
+pref("intl.locale.matchOS", false);
+pref("general.useragent.locale", "en-US");
+
 // Control whether clients.openWindow() opens windows in the same process
 // that called the API vs following our normal multi-process selection
 // algorithm.  Restricting openWindow to same process improves service worker
