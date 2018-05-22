@@ -146,3 +146,7 @@ lextab.py
 .vscode/*
 !.vscode/extensions.json
 !.vscode/tasks.json
+
+# No patch files
+*.orig
+*.rej
