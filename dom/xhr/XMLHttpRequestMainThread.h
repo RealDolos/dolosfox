@@ -9,6 +9,7 @@
 
 #include <bitset>
 #include "nsAutoPtr.h"
+#include "nsIXMLHttpRequest.h"
 #include "nsISupportsUtils.h"
 #include "nsIURI.h"
 #include "nsIHttpChannel.h"
@@ -161,6 +162,7 @@ class nsXHRParseEndListener;
 // Make sure that any non-DOM interfaces added here are also added to
 // nsXMLHttpRequestXPCOMifier.
 class XMLHttpRequestMainThread final : public XMLHttpRequest,
+                                       public nsIXMLHttpRequest,
                                        public nsIStreamListener,
                                        public nsIChannelEventSink,
                                        public nsIProgressEventSink,
@@ -224,6 +226,9 @@ public:
 
   NS_DECL_ISUPPORTS_INHERITED
 
+  // nsIXMLHttpRequest
+  NS_DECL_NSIXMLHTTPREQUEST
+
   // nsIStreamListener
   NS_DECL_NSISTREAMLISTENER
 
@@ -276,8 +281,9 @@ public:
        const nsAString& aUsername,
        const nsAString& aPassword);
 
-  virtual void
-  SetRequestHeader(const nsACString& aName, const nsACString& aValue,
+  void
+  SetRequestHeader(const nsACString& aName,
+                   const nsACString& aValue,
                    ErrorResult& aRv) override;
 
   virtual uint32_t
@@ -418,9 +424,6 @@ public:
   virtual bool
   MozBackgroundRequest() const override;
 
-  nsresult
-  SetMozBackgroundRequest(bool aMozBackgroundRequest);
-
   virtual void
   SetMozBackgroundRequest(bool aMozBackgroundRequest, ErrorResult& aRv) override;
 
@@ -467,11 +470,12 @@ public:
                              const ProgressEventType aType,
                              int64_t aLoaded, int64_t aTotal);
 
-  // This is called by nsXULTemplateQueryProcessorXML.
-  nsresult Init(nsIPrincipal* aPrincipal,
-                nsIGlobalObject* aGlobalObject,
-                nsIURI* aBaseURI,
-                nsILoadGroup* aLoadGroup);
+  // This is called by the factory constructor.
+  nsresult Init();
+
+  nsresult init(nsIPrincipal* principal,
+                nsPIDOMWindowInner* globalObject,
+                nsIURI* baseURI);
 
   void SetRequestObserver(nsIRequestObserver* aObserver);
 

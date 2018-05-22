@@ -13,6 +13,7 @@
 #include "mozilla/dom/HTMLFormSubmission.h"
 #include "mozilla/dom/File.h"
 #include "mozilla/dom/FormDataBinding.h"
+#include "nsIXMLHttpRequest.h"
 #include "nsTArray.h"
 #include "nsWrapperCache.h"
 

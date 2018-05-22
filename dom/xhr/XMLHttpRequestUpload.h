@@ -8,11 +8,13 @@
 #define mozilla_dom_XMLHttpRequestUpload_h
 
 #include "mozilla/dom/XMLHttpRequestEventTarget.h"
+#include "nsIXMLHttpRequest.h"
 
 namespace mozilla {
 namespace dom {
 
-class XMLHttpRequestUpload final : public XMLHttpRequestEventTarget
+class XMLHttpRequestUpload final : public XMLHttpRequestEventTarget,
+                                   public nsIXMLHttpRequestUpload
 {
 public:
   explicit XMLHttpRequestUpload(DOMEventTargetHelper* aOwner)

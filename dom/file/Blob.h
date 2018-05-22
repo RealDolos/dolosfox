@@ -15,6 +15,7 @@
 #include "nsCOMPtr.h"
 #include "nsIDOMBlob.h"
 #include "nsIMutable.h"
+#include "nsIXMLHttpRequest.h"
 #include "nsWrapperCache.h"
 #include "nsWeakReference.h"
 

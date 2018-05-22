@@ -7,6 +7,12 @@
 with Files("**"):
     BUG_COMPONENT = ("Core", "DOM")
 
+XPIDL_SOURCES += [
+    'nsIXMLHttpRequest.idl',
+]
+
+XPIDL_MODULE = 'dom_xhr'
+
 EXPORTS.mozilla.dom += [
     'XMLHttpRequest.h',
     'XMLHttpRequestEventTarget.h',

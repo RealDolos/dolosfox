@@ -168,6 +168,16 @@ BodyExtractor<nsIInputStream>::GetAsStream(nsIInputStream** aResult,
 }
 
 template<> nsresult
+BodyExtractor<nsIXHRSendable>::GetAsStream(nsIInputStream** aResult,
+                                           uint64_t* aContentLength,
+                                           nsACString& aContentTypeWithCharset,
+                                           nsACString& aCharset) const
+{
+  return mBody->GetSendInfo(aResult, aContentLength, aContentTypeWithCharset,
+                            aCharset);
+}
+
+template<> nsresult
 BodyExtractor<const Blob>::GetAsStream(nsIInputStream** aResult,
                                        uint64_t* aContentLength,
                                        nsACString& aContentTypeWithCharset,
