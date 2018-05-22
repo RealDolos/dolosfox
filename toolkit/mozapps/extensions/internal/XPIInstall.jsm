@@ -562,7 +562,7 @@ async function loadManifestFromRDF(aUri, aStream) {
     if (addon.optionsType &&
         addon.optionsType != AddonManager.OPTIONS_INLINE_BROWSER &&
         addon.optionsType != AddonManager.OPTIONS_TYPE_TAB) {
-      throw new Error("Install manifest specifies unknown optionsType: " + addon.optionsType);
+      //throw new Error("Install manifest specifies unknown optionsType: " + addon.optionsType);
     }
 
     if (addon.hasEmbeddedWebExtension) {

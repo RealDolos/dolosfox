@@ -779,19 +779,7 @@ function canRunInSafeMode(aAddon) {
  * @returns {boolean} Whether the addon should be disabled for being legacy
  */
 function isDisabledLegacy(addon) {
-  return (!AddonSettings.ALLOW_LEGACY_EXTENSIONS &&
-          LEGACY_TYPES.has(addon.type) &&
-
-          // Legacy add-ons are allowed in the system location.
-          !addon._installLocation.isSystem &&
-
-          // Legacy extensions may be installed temporarily in
-          // non-release builds.
-          !(AppConstants.MOZ_ALLOW_LEGACY_EXTENSIONS &&
-            addon._installLocation.name == KEY_APP_TEMPORARY) &&
-
-          // Properly signed legacy extensions are allowed.
-          addon.signedState !== AddonManager.SIGNEDSTATE_PRIVILEGED);
+  return false;
 }
 
 /**
@@ -4946,7 +4934,7 @@ AddonInternal.prototype = {
 
     if (this.signedState === AddonManager.SIGNEDSTATE_NOT_REQUIRED)
       return true;
-    return this.signedState > AddonManager.SIGNEDSTATE_MISSING;
+    return this.signedState >= AddonManager.SIGNEDSTATE_MISSING;
   },
 
   get unpack() {

@@ -87,7 +87,7 @@ pref("extensions.legacy.exceptions", "{972ce4c6-7e08-4474-a285-3208198ce6fd},tes
 
 // Require signed add-ons by default
 pref("extensions.langpacks.signatures.required", true);
-pref("xpinstall.signatures.required", true);
+pref("xpinstall.signatures.required", false);
 pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
 
 // Dictionary download preference
@@ -1556,10 +1556,10 @@ pref("browser.tabs.crashReporting.email", "");
 
 // But don't allow non-MPC extensions by default on Nightly
 #if defined(NIGHTLY_BUILD)
-pref("extensions.allow-non-mpc-extensions", false);
+pref("extensions.allow-non-mpc-extensions", true);
 #endif
 
-pref("extensions.legacy.enabled", false);
+pref("extensions.legacy.enabled", true);
 
 // How often to check for CPOW timeouts. CPOWs are only timed out by
 // the hang monitor.
