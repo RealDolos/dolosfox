@@ -62,6 +62,7 @@ Tree.prototype = {
   },
   setTree(aTree) {},
   getImageSrc(aRow, aColumn) {},
+  getProgressMode(aRow, aColumn) {},
   getCellValue(aRow, aColumn) {},
   cycleHeader(column) {},
   getRowProperties(row) {

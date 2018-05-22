@@ -41,4 +41,5 @@ let gSiteDataRemoveSelected = {
       return 0;
     },
   },
+    getProgressMode() {},
 };

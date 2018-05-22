@@ -37,6 +37,7 @@ var gBlocklistManager = {
     isContainer(index) { return false; },
     setTree(tree) {},
     getImageSrc(row, column) {},
+    getProgressMode(row, column) {},
     getCellValue(row, column) {
       if (column.id == "selectionCol")
         return gBlocklistManager._blockLists[row].selected;

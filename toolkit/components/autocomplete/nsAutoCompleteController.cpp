@@ -876,9 +876,6 @@ nsAutoCompleteController::GetName(nsACString& aName)
   return NS_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//// nsAutoCompleteController
-
 nsresult
 nsAutoCompleteController::OpenPopup()
 {

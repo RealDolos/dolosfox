@@ -1543,6 +1543,7 @@ PlacesTreeView.prototype = {
     return node.icon;
   },
 
+  getProgressMode(aRow, aColumn) { },
   getCellValue(aRow, aColumn) { },
 
   getCellText: function PTV_getCellText(aRow, aColumn) {
