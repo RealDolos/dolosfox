@@ -127,16 +127,15 @@
             <description class="text-blurb" id="warningDesc">
               &warningDesc.version;
             </description>
-            <description class="text-blurb" id="communityExperimentalDesc">
-              &community.exp.start;<label class="text-link" href="http://www.mozilla.org/">&community.exp.mozillaLink;</label>&community.exp.middle;<label class="text-link" useoriginprincipal="true" href="about:credits">&community.exp.creditsLink;</label>&community.exp.end;
-            </description>
           </vbox>
-          <description class="text-blurb" id="communityDesc">
-            &community.start2;<label class="text-link" href="http://www.mozilla.org/">&community.mozillaLink;</label>&community.middle2;<label class="text-link" useoriginprincipal="true" href="about:credits">&community.creditsLink;</label>&community.end3;
-          </description>
-          <description class="text-blurb" id="contributeDesc">
-              &helpus.start;<label class="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about">&helpus.donateLink;</label>&helpus.middle;<label class="text-link" href="http://www.mozilla.org/contribute/">&helpus.getInvolvedLink;</label>&helpus.end;
-          </description>
+		  <vbox id="communityDesc">
+		    <description class="text-blurb" id="dolosDesc">
+			  &brandShortName; is designed by RealDolos, an old man sitting in some basement.
+		    </description>
+		    <description class="text-blurb" id="communityNormalDesc">
+			  But is is based on work by a <label class="text-link" useoriginprincipal="true" href="about:credits">&community.creditsLink;</label> working together to keep the Web open, public and accessible to all.
+		    </description>
+		  </vbox>
         </vbox>
       </vbox>
     </hbox>
